@@ -1,7 +1,7 @@
 {
   "name": "zoom-element",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "exports": {
     ".": {
       "import": "./dist/main.es.js",
@@ -13,6 +13,16 @@
   "typings": "./dist/main.d.ts",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "zoom",
+    "zoom-element",
+    "pan",
+    "pan-element",
+    "web-dev",
+    "ui",
+    "javascript",
+    "typescript"
   ],
   "scripts": {
     "build": "tsc && vite build",
