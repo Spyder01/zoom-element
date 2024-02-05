@@ -1,4 +1,4 @@
-import './style.css'
+import ZoomArea from "./zoom-area";
+export { type ZoomAreaConfig, type Position, ZoomAreaException } from "./zoom-area";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = ``
-
+export default ZoomArea;

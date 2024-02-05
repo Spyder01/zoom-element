@@ -63,6 +63,7 @@ class ZoomArea {
     const newScale = this.scale + delta;
     this.scale = Math.max(this.minZoom, Math.min(this.maxZoom, newScale));
     this.setDivStyle();
+    return this;
   }
 
   zoomIn = () => this.zoom(this.zoomScale);
@@ -72,6 +73,7 @@ class ZoomArea {
     this.position = { x: 0, y: 0 };
     this.scale = this.config.initialScale!;
     this.setDivStyle();
+    return this;
   }
 
 
@@ -96,7 +98,16 @@ class ZoomArea {
     this.setDivStyle();
   };
 
-  setDivStyle = () => {
+  private handleCntrlWheel = (e: WheelEvent): void => {
+    if (!e.ctrlKey) {
+      return;
+    }
+
+    this.initialPosition.y += e.deltaY;
+    this.position.y += e.deltaY;
+  }
+
+  private setDivStyle = () => {
     this.zoomArea.style.transform = `scale(${this.scale}) translate(${this.position.x}px, ${this.position.y}px)`;
     this.zoomArea.style.transformOrigin = "center";
   }
@@ -113,6 +124,7 @@ class ZoomArea {
       }
       this.setDivStyle();
     })
+    this.zoomArea.addEventListener("wheel", this.handleCntrlWheel);
   }
 }
 
