@@ -33,6 +33,7 @@ class ZoomArea {
   private isDragging: boolean;
   private config: ZoomAreaConfig;
   private zoomScale: number;
+  private cursorTimeout: number | null = null;
 
 
   constructor(id: string = "zoom-area", config: ZoomAreaConfig = defaultZoomAreaConfig) {
@@ -59,6 +60,27 @@ class ZoomArea {
 
   getScale = () => this.scale;
 
+   setCursor = (cursorType: string) => {
+    this.zoomArea.style.cursor = cursorType
+  }
+
+    setTemporaryCursor = (cursorType: string, duration: number = 300) => {
+
+    if (this.cursorTimeout) {
+      clearTimeout(this.cursorTimeout);
+    }
+
+    this.setCursor(cursorType);
+
+
+    this.cursorTimeout = window.setTimeout(() => {
+      if (!this.isDragging) {
+        this.setCursor('grab');
+      }
+      this.cursorTimeout = null;
+    }, duration);
+  }
+
   zoom = (delta: number) => {
     const newScale = this.scale + delta;
     this.scale = Math.max(this.minZoom, Math.min(this.maxZoom, newScale));
@@ -66,13 +88,21 @@ class ZoomArea {
     return this;
   }
 
-  zoomIn = () => this.zoom(this.zoomScale);
-  zoomOut = () => this.zoom(-this.zoomScale);
+ zoomIn = () => {
+    this.setTemporaryCursor('zoom-in');
+    return this.zoom(this.zoomScale);
+  }
+
+  zoomOut = () => {
+    this.setTemporaryCursor('zoom-out');
+    return this.zoom(-this.zoomScale);
+  }
 
   reset = () => {
     this.position = { x: 0, y: 0 };
     this.scale = this.config.initialScale!;
     this.setDivStyle();
+    this.setCursor('grab');
     return this;
   }
 
@@ -103,6 +133,14 @@ class ZoomArea {
       return;
     }
 
+    e.preventDefault();
+
+    if (e.deltaY < 0) {
+      this.setTemporaryCursor('zoom-in', 200);
+    } else {
+      this.setTemporaryCursor('zoom-out', 200);
+    }
+    
     this.initialPosition.y += e.deltaY;
     this.position.y += e.deltaY;
   }
@@ -114,10 +152,17 @@ class ZoomArea {
 
   private init = () => {
     this.setDivStyle();
+   this.setCursor('grab');
+
     this.zoomArea.addEventListener("mousemove", this.handleDrag);
-    this.zoomArea.addEventListener("mouseup", () => this.isDragging = false)
+
+    this.zoomArea.addEventListener("mouseup", () => {
+      this.isDragging = false;
+      this.setCursor('grab');
+    });
     this.zoomArea.addEventListener("mousedown", e => {
       this.isDragging = true;
+       this.setCursor('grabbing');
       this.initialPosition = {
         x: e.clientX,
         y: e.clientY,
