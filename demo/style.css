@@ -1,0 +1,32 @@
+/* Controls styling */
+.controls {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.controls button {
+  margin: 0 15px;       /* Space between buttons */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Image container */
+.image-container {
+  width: 600px;         /* Fixed width */
+  height: 400px;        /* Fixed height */
+  margin: 0 auto;       /* Center on page */
+  border: 1px solid #ccc;
+  overflow: hidden;     /* Image stays inside container */
+  position: relative;
+}
+
+/* Image styling */
+#myImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: center center;
+  cursor: grab;
+  transition: transform 0.2s ease; /* Smooth zooming */
+}
