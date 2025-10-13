@@ -3,7 +3,6 @@ import javascriptLogo from './javascript.svg'
 import { setupCounter } from './counter.js'
 import ZoomArea from 'zoom-element';
 
-
 document.querySelector('#app').innerHTML = `
   <div>
     <a href="https://vitejs.dev" target="_blank">
@@ -21,7 +20,7 @@ document.querySelector('#app').innerHTML = `
     </p>
   </div>
 `
-const zoomArea = new ZoomArea("zoom")
+const zoomArea = new ZoomArea(document.getElementById('zoom'));
 document.getElementById("counter").addEventListener("click", zoomArea.zoomIn)
 
 setupCounter(document.querySelector('#counter'))
